@@ -86,8 +86,19 @@ body {
 }
 
 .method-icon {
-  font-size: 1.75rem;
+  display: inline-block;
+  color: var(--accent-soft);
+}
+
+.method-icon svg {
+  width: 34px;
+  height: 34px;
   display: block;
+  margin: 0 auto;
+}
+
+.method.active .method-icon {
+  color: var(--accent);
 }
 
 .method-name {

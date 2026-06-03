@@ -11,8 +11,10 @@ on:
 env:
   AZURE_WEBAPP_NAME: perfect-cup-app
   AZURE_RESOURCE_GROUP: perfect-cup-rg
-  AZURE_LOCATION: westeurope
+  AZURE_LOCATION: swedencentral
   NODE_VERSION: "20.x"
+  # Opt JS-based actions into Node.js 24 (Node 20 runtime is being deprecated).
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 # OIDC login requires id-token write permission.
 permissions:

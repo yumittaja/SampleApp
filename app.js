@@ -2,7 +2,12 @@
 const METHODS = {
   pourover: {
     name: "Pour Over",
-    icon: "☕",
+    icon:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M5 5h14l-5 7H10z" />' +        // cone dripper
+      '<path d="M12 12v3" />' +                 // drip stream
+      '<path d="M7 17h10l-1.5 4h-7z" />' +      // carafe
+      '</svg>',
     grind: "Medium-fine",
     temp: 94,
     brewSeconds: 180,
@@ -16,7 +21,14 @@ const METHODS = {
   },
   frenchpress: {
     name: "French Press",
-    icon: "🫖",
+    icon:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M12 2v3" />' +                  // plunger rod
+      '<rect x="8" y="5" width="8" height="2" rx="1" />' + // knob/lid
+      '<path d="M8 8h8v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z" />' + // carafe body
+      '<path d="M16 11h2v4h-2" />' +            // handle
+      '<path d="M8 13h8" />' +                  // plunger disk line
+      '</svg>',
     grind: "Coarse",
     temp: 93,
     brewSeconds: 240,
@@ -30,7 +42,13 @@ const METHODS = {
   },
   espresso: {
     name: "Espresso",
-    icon: "🪐",
+    icon:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M8 3c0 1-1 1.5-1 2.5M12 3c0 1-1 1.5-1 2.5" />' + // steam
+      '<path d="M4 9h13v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" />' + // cup
+      '<path d="M17 10h2a2 2 0 0 1 0 4h-2" />' + // handle
+      '<path d="M5 20h12" />' +                 // saucer
+      '</svg>',
     grind: "Fine",
     temp: 93,
     brewSeconds: 30,
@@ -44,7 +62,14 @@ const METHODS = {
   },
   aeropress: {
     name: "AeroPress",
-    icon: "🧪",
+    icon:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M9 2h6" />' +                   // plunger top
+      '<path d="M12 2v4" />' +                  // plunger rod
+      '<path d="M8 6h8" />' +                   // plunger cap
+      '<path d="M8 9h8l-1 9a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2z" />' + // chamber
+      '<path d="M9 20h6" />' +                  // filter cap
+      '</svg>',
     grind: "Medium-fine",
     temp: 85,
     brewSeconds: 90,
