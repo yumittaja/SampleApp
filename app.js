@@ -229,15 +229,19 @@ function resetTimer() {
 }
 
 startBtn.addEventListener("click", startTimer);
-resetBtn.addEventListener("click", () => {
-  // Notify the server, which intentionally raises an HTTP 500 fault.
-  fetch("/api/reset", { method: "POST" }).then((res) => {
-    if (!res.ok) {
-      console.error(`Reset request failed with HTTP ${res.status}`);
-    }
-  });
-  resetTimer();
-  timerTarget.textContent = `Target brew time: ${formatTime(targetSeconds)}`;
+resetBtn.addEventListener("click", async () => {
+  // Demonstration: the server intentionally raises an HTTP 500. Surface it by
+  // replacing the page with the error so the failure is clearly visible.
+  const res = await fetch("/api/reset", { method: "POST" });
+  if (!res.ok) {
+    const body = await res.text();
+    document.body.innerHTML =
+      `<div style="font-family:monospace;padding:2rem;color:#f3e9df;background:#1a1410;min-height:100vh">` +
+      `<h1>HTTP ${res.status} — ${res.statusText}</h1>` +
+      `<pre style="white-space:pre-wrap">${body}</pre>` +
+      `</div>`;
+    throw new Error(`Reset failed with HTTP ${res.status}`);
+  }
 });
 
 // Init
