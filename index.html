@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfect Cup — Coffee Brewing Helper</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>☕ Perfect Cup</h1>
+    <p class="tagline">Your guide to brewing the perfect cup of coffee</p>
+  </header>
+
+  <main class="container">
+    <!-- Brew Calculator -->
+    <section class="card">
+      <h2>1. Choose your brew</h2>
+      <div class="methods" id="methods"></div>
+    </section>
+
+    <section class="card">
+      <h2>2. Dial in the recipe</h2>
+      <div class="calc-grid">
+        <label>
+          Cups
+          <input type="number" id="cups" min="1" max="12" value="2" />
+        </label>
+        <label>
+          Cup size (ml)
+          <input type="number" id="cupSize" min="60" max="500" step="10" value="240" />
+        </label>
+        <label class="ratio-field">
+          <span class="ratio-head">Strength</span>
+          <input type="range" id="ratio" min="13" max="18" step="1" value="15" />
+          <span class="ratio-scale">
+            <span class="ratio-beans" id="ratioBeans" aria-hidden="true"></span>
+            <span class="ratio-ends"><span>Mild</span><span>Strong</span></span>
+          </span>
+        </label>
+      </div>
+
+      <div class="results">
+        <div class="result">
+          <span class="result-value" id="waterOut">480</span>
+          <span class="result-label">ml water</span>
+        </div>
+        <div class="result">
+          <span class="result-value" id="coffeeOut">30</span>
+          <span class="result-label">g coffee</span>
+        </div>
+        <div class="result">
+          <span class="result-value" id="grindOut">Medium</span>
+          <span class="result-label">grind size</span>
+        </div>
+        <div class="result">
+          <span class="result-value" id="tempOut">94°C</span>
+          <span class="result-label">water temp</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brew Steps + Timer -->
+    <section class="card">
+      <h2>3. Brew along</h2>
+      <ol class="steps" id="steps"></ol>
+
+      <div class="timer">
+        <div class="timer-display" id="timerDisplay">00:00</div>
+        <div class="timer-controls">
+          <button id="startBtn" class="btn btn-primary">Start</button>
+          <button id="resetBtn" class="btn">Reset</button>
+        </div>
+        <p class="timer-target" id="timerTarget"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Brew responsibly. Adjust to taste — the perfect cup is the one you enjoy.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

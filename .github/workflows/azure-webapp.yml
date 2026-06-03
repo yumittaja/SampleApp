@@ -1,0 +1,91 @@
+name: Deploy to Azure Web App
+
+# Deploys the Perfect Cup app to an Azure App Service (Web App) on every
+# push to the main branch, and lets you trigger it manually.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Set these to match your Azure environment.
+env:
+  AZURE_WEBAPP_NAME: perfect-cup-app
+  AZURE_RESOURCE_GROUP: perfect-cup-rg
+  AZURE_LOCATION: westeurope
+  NODE_VERSION: "20.x"
+
+# OIDC login requires id-token write permission.
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    environment: production
+    outputs:
+      webapp-name: ${{ steps.deploy.outputs.webAppName }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Ensure resource group exists
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            az group create \
+              --name "${{ env.AZURE_RESOURCE_GROUP }}" \
+              --location "${{ env.AZURE_LOCATION }}"
+
+      - name: Deploy Bicep infrastructure
+        id: deploy
+        uses: azure/cli@v2
+        with:
+          azcliversion: latest
+          inlineScript: |
+            webAppName=$(az deployment group create \
+              --resource-group "${{ env.AZURE_RESOURCE_GROUP }}" \
+              --template-file infra/main.bicep \
+              --parameters infra/main.bicepparam \
+              --query properties.outputs.webAppName.value -o tsv)
+            echo "webAppName=$webAppName" >> "$GITHUB_OUTPUT"
+
+  build-and-deploy:
+    needs: deploy-infra
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --omit=dev
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ needs.deploy-infra.outputs.webapp-name }}
+          package: .
