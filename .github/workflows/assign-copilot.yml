@@ -1,0 +1,53 @@
+name: Assign issues to Copilot
+
+# Assigns the GitHub Copilot coding agent to every newly opened issue.
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  assign-copilot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Copilot to the new issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          # Look up the Copilot coding agent's bot ID for this repo.
+          copilotId=$(gh api graphql -f query='
+            query($owner: String!, $name: String!) {
+              repository(owner: $owner, name: $name) {
+                suggestedActors(capabilities: [CAN_BE_ASSIGNED], first: 100) {
+                  nodes {
+                    login
+                    __typename
+                    ... on Bot { id }
+                    ... on User { id }
+                  }
+                }
+              }
+            }' -f owner="$REPO_OWNER" -f name="$REPO_NAME" \
+            --jq '.data.repository.suggestedActors.nodes[] | select(.login == "copilot-swe-agent") | .id')
+
+          if [ -z "$copilotId" ]; then
+            echo "Copilot coding agent is not available for this repository. Ensure it is enabled."
+            exit 1
+          fi
+
+          # Assign Copilot to the issue.
+          gh api graphql -f query='
+            mutation($assignableId: ID!, $actorIds: [ID!]!) {
+              replaceActorsForAssignable(input: { assignableId: $assignableId, actorIds: $actorIds }) {
+                assignable {
+                  ... on Issue { number }
+                }
+              }
+            }' -f assignableId="$ISSUE_NODE_ID" -f actorIds="$copilotId"
+
+          echo "Assigned Copilot to issue."
