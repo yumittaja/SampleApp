@@ -76,7 +76,7 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
       appSettings: [
         {
           name: 'SCM_DO_BUILD_DURING_DEPLOYMENT'
-          value: 'true'
+          value: 'false'
         }
         {
           name: 'WEBSITE_NODE_DEFAULT_VERSION'

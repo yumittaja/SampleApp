@@ -230,6 +230,12 @@ function resetTimer() {
 
 startBtn.addEventListener("click", startTimer);
 resetBtn.addEventListener("click", () => {
+  // Notify the server, which intentionally raises an HTTP 500 fault.
+  fetch("/api/reset", { method: "POST" }).then((res) => {
+    if (!res.ok) {
+      console.error(`Reset request failed with HTTP ${res.status}`);
+    }
+  });
   resetTimer();
   timerTarget.textContent = `Target brew time: ${formatTime(targetSeconds)}`;
 });
