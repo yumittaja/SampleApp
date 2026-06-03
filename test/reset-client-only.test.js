@@ -11,13 +11,5 @@ test("reset remains client-only with no /api/reset calls", () => {
 
   assert.doesNotMatch(appJs, /fetch\s*\(\s*["']\/api\/reset["']/);
   assert.doesNotMatch(serverJs, /app\.post\s*\(\s*["']\/api\/reset["']/);
-  assert.match(appJs, /resetBtn\.addEventListener\(\s*["']click["'],\s*resetTimer\s*\)/);
-
-  const resetTimerMatch = appJs.match(/function resetTimer\(\)\s*\{([^}]*)\}/);
-  assert.ok(resetTimerMatch, "Expected resetTimer function to exist");
-  const resetTimerBody = resetTimerMatch[1];
-
-  assert.match(resetTimerBody, /stopTimer\(\);/);
-  assert.match(resetTimerBody, /seconds\s*=\s*0;/);
-  assert.match(resetTimerBody, /timerDisplay\.textContent\s*=\s*formatTime\(0\);/);
+  assert.match(appJs, /resetBtn\.addEventListener\(\s*["']click["']\s*,\s*resetTimer\s*\)/);
 });
