@@ -226,7 +226,6 @@ function resetTimer() {
   stopTimer();
   seconds = 0;
   timerDisplay.textContent = formatTime(0);
-  timerTarget.textContent = `Target brew time: ${formatTime(targetSeconds)}`;
 }
 
 startBtn.addEventListener("click", startTimer);
