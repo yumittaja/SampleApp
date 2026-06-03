@@ -14,7 +14,9 @@ jobs:
     steps:
       - name: Assign Copilot to the new issue
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The default GITHUB_TOKEN does not surface the Copilot coding agent in
+          # suggestedActors. Use a PAT (repo + read:org scope) stored as a secret.
+          GH_TOKEN: ${{ secrets.COPILOT_ASSIGN_TOKEN }}
           ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
