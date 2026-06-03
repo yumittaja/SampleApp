@@ -12,4 +12,7 @@ test("reset remains client-only with no /api/reset calls", () => {
   assert.doesNotMatch(appJs, /fetch\s*\(\s*["']\/api\/reset["']/);
   assert.doesNotMatch(serverJs, /app\.post\s*\(\s*["']\/api\/reset["']/);
   assert.match(appJs, /resetBtn\.addEventListener\(\s*["']click["'],\s*resetTimer\s*\)/);
+  assert.match(appJs, /function resetTimer\(\)\s*\{[\s\S]*stopTimer\(\);/);
+  assert.match(appJs, /function resetTimer\(\)\s*\{[\s\S]*seconds\s*=\s*0;/);
+  assert.match(appJs, /function resetTimer\(\)\s*\{[\s\S]*timerDisplay\.textContent\s*=\s*formatTime\(0\);/);
 });
