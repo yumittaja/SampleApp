@@ -41,6 +41,13 @@ npm start
 
 Then open <http://localhost:8000>.
 
+### Optional demo fault
+
+The server keeps a demo endpoint at `POST /api/reset` for fault-injection tests,
+but it is disabled by default so production traffic does not generate a false
+`500` outage signal. Set `ENABLE_DEMO_RESET_FAULT=true` before `npm start` if
+you want that endpoint to intentionally return `500` for testing.
+
 ### Using Python's built-in server
 
 ```powershell
